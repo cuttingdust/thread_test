@@ -50,6 +50,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(CommonTools)
 
 add_subdirectory(thread_one)
+add_subdirectory(thread_detach)
 
 
 # # 拷贝assert目录到输出目录
