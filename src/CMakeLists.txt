@@ -51,6 +51,7 @@ include(CommonTools)
 
 add_subdirectory(thread_one)
 add_subdirectory(thread_detach)
+add_subdirectory(thread_para)
 
 
 # # 拷贝assert目录到输出目录
