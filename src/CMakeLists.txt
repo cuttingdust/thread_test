@@ -56,6 +56,7 @@ add_subdirectory(thread_pointer)
 add_subdirectory(thread_class)
 add_subdirectory(thread_callonece)
 add_subdirectory(thread_lambda)
+add_subdirectory(thread_lock)
 
 
 # # 拷贝assert目录到输出目录
