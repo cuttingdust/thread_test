@@ -3,7 +3,8 @@
 #include <thread>
 #include <print>
 
-static std::timed_mutex tmutx;
+static std::timed_mutex     tmutx;
+static std::recursive_mutex rmutx;
 
 void ThreadMainTime(int i)
 {
@@ -26,10 +27,46 @@ void ThreadMainTime(int i)
     }
 }
 
+void Task1()
+{
+    rmutx.lock();
+    std::cout << "task1 [in]" << std::endl;
+    rmutx.unlock();
+}
+void Task2()
+{
+    rmutx.lock();
+    std::cout << "task2 [in]" << std::endl;
+    rmutx.unlock();
+}
+
+void ThreadMainRec(int i)
+{
+    for (;;)
+    {
+        rmutx.lock();
+        Task1();
+        std::cout << i << "[in]" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        Task2();
+        rmutx.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
 
 int main(int argc, char *argv[])
 {
     std::cout << "main thread ID " << std::this_thread::get_id() << std::endl;
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::thread th(ThreadMainRec, i + 1);
+        th.detach();
+    }
+
+    getchar();
+    //////////////////////////////////////////////////////////////////
+
     for (int i = 0; i < 3; ++i)
     {
         std::thread(ThreadMainTime, i).detach();
