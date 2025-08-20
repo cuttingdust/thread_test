@@ -59,6 +59,7 @@ add_subdirectory(thread_lambda)
 add_subdirectory(mutx_lock)
 add_subdirectory(mutx_lock_sleep)
 add_subdirectory(mutx_time_and_recu)
+add_subdirectory(mutx_share_time)
 
 
 # # 拷贝assert目录到输出目录
