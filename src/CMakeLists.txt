@@ -63,6 +63,7 @@ add_subdirectory(mutx_share_time)
 add_subdirectory(usageMutx_RAII)
 add_subdirectory(usageMutx_lockguard)
 add_subdirectory(usageMutx_unique_lock)
+add_subdirectory(usageMutx_shared_lock)
 
 
 # # 拷贝assert目录到输出目录
