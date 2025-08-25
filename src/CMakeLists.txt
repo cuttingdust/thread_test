@@ -65,6 +65,7 @@ add_subdirectory(usageMutx_lockguard)
 add_subdirectory(usageMutx_unique_lock)
 add_subdirectory(usageMutx_shared_lock)
 add_subdirectory(usageMutx_scoped_lock)
+add_subdirectory(thread_msg_list)
 
 
 # # 拷贝assert目录到输出目录
