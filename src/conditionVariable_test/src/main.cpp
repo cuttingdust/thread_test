@@ -19,7 +19,7 @@ void ThreadWrite()
             g_msgs_.push_back(ss.str());
             lock.unlock();
             g_cv.notify_one(); /// 发送信号
-            //cv.notify_all();
+            // g_cv.notify_all(); /// 相比而言 notify_one性能要比 notify_all 好
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
