@@ -19,7 +19,25 @@ int main(int argc, char *argv[])
         std::thread(std::move(task), 101).detach();
 
         std::cout << "begin result get" << std::endl;
-        std::cout << "result get " << result.get() << std::endl;
+        // std::cout << "result get " << result.get() << std::endl;
+
+        /// 测试是否超时
+        for (int i = 0; i < 30; i++)
+        {
+            if (result.wait_for(std::chrono::milliseconds(100)) != std::future_status::ready)
+            {
+                std::cout << "wait " << i << std::endl;
+                continue;
+            }
+        }
+        if (result.wait_for(std::chrono::milliseconds(100)) == std::future_status::timeout)
+        {
+            std::cout << "wait result timeout" << std::endl;
+        }
+        else
+        {
+            std::cout << "result get " << result.get() << std::endl;
+        }
     }
     getchar();
     return 0;
