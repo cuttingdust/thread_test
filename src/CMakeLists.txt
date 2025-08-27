@@ -68,6 +68,7 @@ add_subdirectory(usageMutx_scoped_lock)
 add_subdirectory(thread_msg_list)
 add_subdirectory(conditionVariable_test)
 add_subdirectory(conditionVariable_msg_list)
+add_subdirectory(async_promise)
 
 
 # # 拷贝assert目录到输出目录
