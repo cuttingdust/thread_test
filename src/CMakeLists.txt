@@ -71,6 +71,7 @@ add_subdirectory(conditionVariable_msg_list)
 add_subdirectory(async_promise)
 add_subdirectory(async_packaged_task)
 add_subdirectory(async_async)
+add_subdirectory(thread_for)
 
 
 # # 拷贝assert目录到输出目录
