@@ -72,6 +72,7 @@ add_subdirectory(async_promise)
 add_subdirectory(async_packaged_task)
 add_subdirectory(async_async)
 add_subdirectory(thread_for)
+add_subdirectory(thread_pool)
 
 
 # # 拷贝assert目录到输出目录
