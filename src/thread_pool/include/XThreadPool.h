@@ -13,6 +13,12 @@
 
 #include <memory>
 
+class XTask
+{
+public:
+    virtual auto run() -> void = 0;
+};
+
 class XThreadPool
 {
 public:
@@ -26,6 +32,10 @@ public:
 
     /// \brief 启动所有线程，必须先调用Init
     auto start() -> void;
+
+    auto addTask(XTask *task) -> void;
+
+    auto getTask() const -> XTask *;
 
 private:
     class PImpl;
