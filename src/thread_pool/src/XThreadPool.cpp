@@ -20,6 +20,7 @@ public:
     XThreadPool *owenr_ = nullptr;
 
     int                        thread_num_ = 0; /// 线程数量
+    bool                       is_running_ = false;
     std::mutex                 mtx_;
     std::vector<std::thread *> threads_;
 
@@ -34,7 +35,7 @@ XThreadPool::PImpl::PImpl(XThreadPool *owenr) : owenr_(owenr)
 auto XThreadPool::PImpl::run() -> void
 {
     std::cout << "begin XThreadPool Run " << std::this_thread::get_id() << std::endl;
-    while (true)
+    while (is_running_)
     {
         auto task = owenr_->getTask();
         if (!task)
@@ -80,9 +81,10 @@ auto XThreadPool::start() -> void
 
     {
         std::unique_lock<std::mutex> lock(impl_->mtx_);
-        /// 启动线程
+        impl_->is_running_ = true;
         for (int i = 0; i < impl_->thread_num_; i++)
         {
+            /// 启动线程
             auto th = new std::thread(&XThreadPool::PImpl::run, impl_.get());
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             impl_->threads_.push_back(th);
@@ -90,10 +92,24 @@ auto XThreadPool::start() -> void
     }
 }
 
+auto XThreadPool::stop() -> void
+{
+    impl_->is_running_ = false;
+    impl_->cv_.notify_all();
+    for (auto &th : impl_->threads_)
+    {
+        th->join();
+    }
+    std::unique_lock<std::mutex> lock(impl_->mtx_);
+    impl_->threads_.clear();
+}
+
 auto XThreadPool::addTask(XTask *task) -> void
 {
     std::unique_lock<std::mutex> lock(impl_->mtx_);
     impl_->tasks_.push_back(task);
+    task->isRunning = [this] { return isRunning(); };
+
     lock.unlock();
     impl_->cv_.notify_one();
 }
@@ -105,9 +121,17 @@ auto XThreadPool::getTask() const -> XTask *
     {
         impl_->cv_.wait(lock);
     }
+    if (!isRunning())
+        return nullptr;
+
     if (impl_->tasks_.empty())
         return nullptr;
     auto task = impl_->tasks_.front();
     impl_->tasks_.pop_front();
     return task;
+}
+
+auto XThreadPool::isRunning() const -> bool
+{
+    return impl_->is_running_;
 }

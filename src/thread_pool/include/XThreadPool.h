@@ -12,11 +12,13 @@
 #define XTHREADPOOL_H
 
 #include <memory>
+#include <functional>
 
 class XTask
 {
 public:
-    virtual auto run() -> void = 0;
+    virtual auto          run() -> void = 0;
+    std::function<bool()> isRunning     = nullptr;
 };
 
 class XThreadPool
@@ -33,9 +35,20 @@ public:
     /// \brief 启动所有线程，必须先调用Init
     auto start() -> void;
 
+    /// \brief 停止所有线程
+    auto stop() -> void;
+
+    /// \brief 添加任务
+    /// \param task
     auto addTask(XTask *task) -> void;
 
+    /// \brief 获得任务
+    /// \return
     auto getTask() const -> XTask *;
+
+    /// \brief 是否正在运行
+    /// \return
+    auto isRunning() const -> bool;
 
 private:
     class PImpl;
