@@ -17,6 +17,9 @@
 class XTask
 {
 public:
+    using Ptr = std::shared_ptr<XTask>;
+
+public:
     virtual auto          run() -> void = 0;
     std::function<bool()> isRunning     = nullptr;
 };
@@ -40,15 +43,19 @@ public:
 
     /// \brief 添加任务
     /// \param task
-    auto addTask(XTask *task) -> void;
+    auto addTask(const XTask::Ptr task) -> void;
 
     /// \brief 获得任务
     /// \return
-    auto getTask() const -> XTask *;
+    auto getTask() const -> XTask::Ptr;
 
     /// \brief 是否正在运行
     /// \return
     auto isRunning() const -> bool;
+
+    /// \brief 获得正在运行的任务数量
+    /// \return
+    auto getRunTaskCnt() const -> int;
 
 private:
     class PImpl;
