@@ -14,7 +14,7 @@ public:
     }
 
 public:
-    auto run() -> void override
+    auto run() -> int override
     {
         std::cout << "================================================" << std::endl;
         std::cout << std::this_thread::get_id() << " Mytask " << name << std::endl;
@@ -31,6 +31,7 @@ public:
             std::cout << "." << std::flush;
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
+        return 100;
     }
 
 public:
@@ -45,22 +46,34 @@ int main(int argc, char *argv[])
     pool.start();
 
     {
-        auto task1  = MyTask::create();
-        task1->name = "test name 001";
-        pool.addTask(task1);
+        // auto task1  = MyTask::create();
+        // task1->name = "test name 001";
+        // pool.addTask(task1);
+        //
+        // auto task2  = MyTask::create();
+        // task2->name = "test name 002";
+        // pool.addTask(task2);
 
-        auto task2  = MyTask::create();
-        task2->name = "test name 002";
-        pool.addTask(task2);
+        auto task3  = MyTask::create();
+        task3->name = "test shared 003";
+        pool.addTask(task3);
+
+        auto task4  = MyTask::create();
+        task4->name = "test shared 004";
+        pool.addTask(task4);
+
+         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
+
+        auto re = task4->getReturn();
+        std::cout << "task4->GetReturn() = " << re << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        pool.stop();
+        std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
+
+        getchar();
+
+        return 0;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
-
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    pool.stop();
-    std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
-
-    getchar();
-
-    return 0;
 }

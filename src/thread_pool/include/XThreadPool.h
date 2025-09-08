@@ -13,15 +13,19 @@
 
 #include <memory>
 #include <functional>
+#include <future>
 
 class XTask
 {
 public:
     using Ptr = std::shared_ptr<XTask>;
+    auto setReturn(int v) -> void;
+    auto getReturn() -> int;
 
 public:
-    virtual auto          run() -> void = 0;
-    std::function<bool()> isRunning     = nullptr;
+    virtual auto          run() -> int = 0;
+    std::function<bool()> isRunning    = nullptr;
+    std::promise<int>     p_; ///< 用来接收返回值
 };
 
 class XThreadPool

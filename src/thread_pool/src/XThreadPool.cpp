@@ -44,7 +44,8 @@ auto XThreadPool::PImpl::run() -> void
         ++task_run_count_;
         try
         {
-            task->run();
+            auto re = task->run();
+            task->setReturn(re);
         }
         catch (...)
         {
@@ -52,6 +53,17 @@ auto XThreadPool::PImpl::run() -> void
         --task_run_count_;
     }
     std::cout << "end XThreadPool Run " << std::this_thread::get_id() << std::endl;
+}
+
+auto XTask::setReturn(int v) -> void
+{
+    p_.set_value(v);
+}
+
+auto XTask::getReturn() -> int
+{
+    /// 阻塞等待 set_value
+    return p_.get_future().get();
 }
 
 XThreadPool::XThreadPool()
