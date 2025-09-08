@@ -75,6 +75,6 @@ add_subdirectory(thread_for)
 add_subdirectory(thread_pool)
 
 
-# # 拷贝assert目录到输出目录
-# set(ASSERT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/assert)
-# file(COPY ${ASSERT_PATH} DESTINATION ${OUT_RUN_PATH})
+# 拷贝assert目录到输出目录
+set(ASSERT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/assert)
+file(COPY ${ASSERT_PATH} DESTINATION ${OUT_RUN_PATH})

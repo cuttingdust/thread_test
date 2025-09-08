@@ -1,8 +1,12 @@
 ﻿
 #include "XThreadPool.h"
+#include "XVideoTask.h"
 
 #include <iostream>
 #include <thread>
+
+constexpr auto in_path  = "assert\\test.mp4";
+constexpr auto out_path = "assert\\out.mp4";
 
 class MyTask : public XTask
 {
@@ -54,19 +58,27 @@ int main(int argc, char *argv[])
         // task2->name = "test name 002";
         // pool.addTask(task2);
 
-        auto task3  = MyTask::create();
-        task3->name = "test shared 003";
-        pool.addTask(task3);
+        // auto task3  = MyTask::create();
+        // task3->name = "test shared 003";
+        // pool.addTask(task3);
+        //
+        // auto task4  = MyTask::create();
+        // task4->name = "test shared 004";
+        // pool.addTask(task4);
 
-        auto task4  = MyTask::create();
-        task4->name = "test shared 004";
-        pool.addTask(task4);
+        auto videoTask      = XVideoTask::create();
+        videoTask->in_path  = in_path;
+        videoTask->out_path = out_path;
+        videoTask->width    = 640;
+        videoTask->height   = 480;
+        pool.addTask(videoTask);
 
-         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
 
-        auto re = task4->getReturn();
-        std::cout << "task4->GetReturn() = " << re << std::endl;
+        // auto re = task4->getReturn();
+        auto re = videoTask->getReturn();
+        std::cout << "videoTask->GetReturn() = " << re << std::endl;
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
         pool.stop();
