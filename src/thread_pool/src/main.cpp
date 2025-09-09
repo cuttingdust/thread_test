@@ -48,44 +48,85 @@ int main(int argc, char *argv[])
     XThreadPool pool;
     pool.init(16);
     pool.start();
-
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     {
-        // auto task1  = MyTask::create();
-        // task1->name = "test name 001";
-        // pool.addTask(task1);
-        //
-        // auto task2  = MyTask::create();
-        // task2->name = "test name 002";
-        // pool.addTask(task2);
+        {
+            // auto task1  = MyTask::create();
+            // task1->name = "test name 001";
+            // pool.addTask(task1);
+            //
+            // auto task2  = MyTask::create();
+            // task2->name = "test name 002";
+            // pool.addTask(task2);
 
-        // auto task3  = MyTask::create();
-        // task3->name = "test shared 003";
-        // pool.addTask(task3);
-        //
-        // auto task4  = MyTask::create();
-        // task4->name = "test shared 004";
-        // pool.addTask(task4);
+            // auto task3  = MyTask::create();
+            // task3->name = "test shared 003";
+            // pool.addTask(task3);
+            //
+            // auto task4  = MyTask::create();
+            // task4->name = "test shared 004";
+            // pool.addTask(task4);
 
-        auto videoTask      = XVideoTask::create();
-        videoTask->in_path  = in_path;
-        videoTask->out_path = out_path;
-        videoTask->width    = 640;
-        videoTask->height   = 480;
-        pool.addTask(videoTask);
+            // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            // std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
+            //
+            // auto re = task4->getReturn();
+            // std::cout << "task4->GetReturn() = " << re << std::endl;
+            //
+            // std::this_thread::sleep_for(std::chrono::seconds(1));
+            // pool.stop();
+        }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
+        {
+            // auto videoTask      = XVideoTask::create();
+            // videoTask->in_path  = in_path;
+            // videoTask->out_path = out_path;
+            // videoTask->width    = 640;
+            // videoTask->height   = 480;
+            // pool.addTask(videoTask);
+            //
+            // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            // std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
+            //
+            // auto re = videoTask->getReturn();
+            // std::cout << "videoTask->GetReturn() = " << re << std::endl;
+            //
+            // std::this_thread::sleep_for(std::chrono::seconds(1));
+            // pool.stop();
+            // std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
+        }
 
-        // auto re = task4->getReturn();
-        auto re = videoTask->getReturn();
-        std::cout << "videoTask->GetReturn() = " << re << std::endl;
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        pool.stop();
-        std::cout << "task run  count = " << pool.getRunTaskCnt() << std::endl;
-
-        getchar();
-
-        return 0;
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            for (;;)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                std::cout << "\n====================================================================\n";
+                auto task = XVideoTask::create();
+                std::cout << "请输入命令（v e l）:";
+                std::string cmd;
+                std::cin >> cmd;
+                if (cmd == "e")
+                    break;
+                else if (cmd == "l")
+                {
+                    std::cout << "task run count = " << pool.getRunTaskCnt() << std::endl;
+                    continue;
+                }
+                std::cout << "视频源：";
+                std::cin >> task->in_path;
+                std::cout << "目标：";
+                std::cin >> task->out_path;
+                std::cout << "输出宽：";
+                std::cin >> task->width;
+                std::cout << "输出高：";
+                std::cin >> task->height;
+                pool.addTask(task);
+            }
+            pool.stop();
+        }
     }
+
+    getchar();
+    return 0;
 }
